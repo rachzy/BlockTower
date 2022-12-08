@@ -57,7 +57,7 @@ public class ArenaModel {
 
     public void setArenaFile(String key, Object value) {
         FileConfiguration arenasConfig = Arenas.get();
-        arenasConfig.addDefault(String.format("arenas.%s.%s", this.getName(), key), value);
+        arenasConfig.set(String.format("arenas.%s.%s", this.getName(), key), value);
         Arenas.save();
     }
 
@@ -80,13 +80,13 @@ public class ArenaModel {
         }
 
         this.isOpen = true;
-        setArenaFile("open", true);
+        setArenaFile("isOpen", true);
         Rooms.create(this);
     }
 
     public void close() {
         this.isOpen = false;
-        setArenaFile("open", false);
+        setArenaFile("isOpen", false);
     }
 
     public void setPlayerMin(Integer playerMin) {
@@ -102,7 +102,7 @@ public class ArenaModel {
     }
 
     public void setOpen(Boolean open) {
-        isOpen = open;
+        this.isOpen = open;
     }
 
     public void setSpawns(List<HashMap<String, Object>> spawns) {

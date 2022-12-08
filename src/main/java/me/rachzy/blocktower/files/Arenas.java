@@ -1,6 +1,7 @@
 package me.rachzy.blocktower.files;
 
 import me.rachzy.blocktower.data.ArenasList;
+import me.rachzy.blocktower.data.Rooms;
 import me.rachzy.blocktower.functions.ConfigPuller;
 import me.rachzy.blocktower.models.ArenaModel;
 import org.bukkit.Bukkit;

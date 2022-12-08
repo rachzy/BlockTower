@@ -43,7 +43,11 @@ public class Messages {
         messagesFile.addDefault("set_win_height_invalid_height", "&cThe height value must range from 0 to 256!");
         messagesFile.addDefault("set_win_height_success", "&aYou've set the win height of {arena_name} to {height}");
         messagesFile.addDefault("create_room_wrong_usage", "&cUse: /blocktower createroom <:arena_name>");
+        messagesFile.addDefault("create_room_already_created", "&cThis room is already created and open!");
         messagesFile.addDefault("create_room_success", "&aThe room {arena_name} was successfully created and now is open to play!");
+        messagesFile.addDefault("delete_room_wrong_usage", "&cUse: /blocktower deleteroom <:arena_name>");
+        messagesFile.addDefault("delete_room_not_found", "&cCouldn't find an open room for that arena.");
+        messagesFile.addDefault("delete_room_success", "&aThe room {arena_name} was successfully deleted!");
     }
 
     public static FileConfiguration get() {

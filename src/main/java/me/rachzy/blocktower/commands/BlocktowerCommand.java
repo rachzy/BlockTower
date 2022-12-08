@@ -52,8 +52,6 @@ public class BlocktowerCommand implements CommandExecutor {
             return true;
         }
 
-        Player player = (Player) sender;
-
         // Check if the player doesn't have permission
         if ((args[0].equals("createarena")
                 || args[0].equals("editarena")
@@ -83,6 +81,8 @@ public class BlocktowerCommand implements CommandExecutor {
 
         //Code chunk for createarena command
         if (args[0].equals("createarena")) {
+            Player player = (Player) sender;
+
             //If the player entered an invalid amount of args
             if (args.length != 2) {
                 player.sendMessage(new ConfigPuller("messages").getStringWithPrefix("create_arena_wrong_usage"));
@@ -116,6 +116,7 @@ public class BlocktowerCommand implements CommandExecutor {
 
         //Code chunk for editarena command
         if(args[0].equals("editarena")) {
+            Player player = (Player) sender;
             if(args.length != 2) {
                 player.sendMessage(new ConfigPuller("messages").getStringWithPrefix("edit_arena_wrong_usage"));
                 return true;
@@ -134,6 +135,8 @@ public class BlocktowerCommand implements CommandExecutor {
 
         // Code chunk for setspawn
         if (args[0].equals("setspawn")) {
+            Player player = (Player) sender;
+
             if (args.length != 3) {
                 player.sendMessage(new ConfigPuller("messages").getStringWithPrefix("set_spawn_wrong_usage"));
                 return true;
@@ -190,6 +193,7 @@ public class BlocktowerCommand implements CommandExecutor {
             }
         }
 
+        // Code chunk for create room
         if(args[0].equals("createroom")) {
             if(args.length != 2) {
                 sender.sendMessage(new ConfigPuller("messages").getStringWithPrefix("create_room_wrong_usage"));
@@ -198,6 +202,12 @@ public class BlocktowerCommand implements CommandExecutor {
 
             String arenaName = args[1];
             ArenaModel arena = ArenasList.getArenaByName(arenaName);
+
+            if(arena.getOpen()) {
+                sender.sendMessage(new ConfigPuller("messages").getStringWithPrefix("create_room_already_created"));
+                return true;
+            }
+
             try {
                 arena.open(); // This method will automatically open the arena and create a room for it
             } catch (Throwable e) {
@@ -206,6 +216,26 @@ public class BlocktowerCommand implements CommandExecutor {
             }
 
             sender.sendMessage(new ConfigPuller("messages").getStringWithPrefix("create_room_success").replace("{arena_name}", arenaName));
+            return true;
+        }
+
+        // Code chunk for delete room
+        if(args[0].equals("deleteroom")) {
+            if(args.length != 2) {
+                sender.sendMessage(new ConfigPuller("messages").getStringWithPrefix("delete_room_wrong_usage"));
+                return true;
+            }
+
+            String arenaName = args[1];
+            ArenaModel arena = ArenasList.getArenaByName(arenaName);
+
+            if(!arena.getOpen()) {
+                sender.sendMessage(new ConfigPuller("messages").getStringWithPrefix("delete_room_not_found"));
+                return true;
+            }
+
+            arena.close();
+            sender.sendMessage(new ConfigPuller("messages").getStringWithPrefix("delete_room_success").replace("{arena_name}", arenaName));
             return true;
         }
 
