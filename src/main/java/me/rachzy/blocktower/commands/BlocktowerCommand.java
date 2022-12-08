@@ -1,5 +1,7 @@
 package me.rachzy.blocktower.commands;
 
+import me.rachzy.blocktower.data.ArenasList;
+import me.rachzy.blocktower.data.Rooms;
 import me.rachzy.blocktower.files.Arenas;
 import me.rachzy.blocktower.functions.ConfigPuller;
 import me.rachzy.blocktower.models.ArenaModel;
@@ -73,7 +75,7 @@ public class BlocktowerCommand implements CommandExecutor {
                 || args[0].equals("deleteroom")
                 || args[0].equals("play")
         ) {
-            if(args.length > 1 && Arenas.getArenaByName(args[1]) == null) {
+            if(args.length > 1 && ArenasList.getArenaByName(args[1]) == null) {
                 sender.sendMessage(new ConfigPuller("messages").getStringWithPrefix("invalid_arena_name"));
                 return true;
             }
@@ -148,7 +150,7 @@ public class BlocktowerCommand implements CommandExecutor {
                     return true;
                 }
 
-                ArenaModel getArena = Arenas.getArenaByName(arenaName);
+                ArenaModel getArena = ArenasList.getArenaByName(arenaName);
 
                 getArena.createNewSpawn(spawnNumber.toString(), spawnLocation);
                 player.sendMessage(new ConfigPuller("messages").getStringWithPrefix("spawn_created").replace("{spawn_number}", spawnNumber.toString()));
@@ -162,33 +164,50 @@ public class BlocktowerCommand implements CommandExecutor {
         // Code chunk for setWinHeight
         if(args[0].equals("setwinheight")) {
             if (args.length != 3) {
-                player.sendMessage(new ConfigPuller("messages").getStringWithPrefix("set_win_height_wrong_usage"));
+                sender.sendMessage(new ConfigPuller("messages").getStringWithPrefix("set_win_height_wrong_usage"));
                 return true;
             }
 
             try {
                 String arenaName = args[1];
-                ArenaModel arena = Arenas.getArenaByName(arenaName);
+                ArenaModel arena = ArenasList.getArenaByName(arenaName);
                 int height = Integer.parseInt(args[2]);
 
                 if(height < 0 || height > 256) {
-                    player.sendMessage(new ConfigPuller("messages").getStringWithPrefix("set_win_height_invalid_height"));
+                    sender.sendMessage(new ConfigPuller("messages").getStringWithPrefix("set_win_height_invalid_height"));
                     return true;
                 }
 
                 arena.setWinHeight(height);
-                player.sendMessage(new ConfigPuller("messages")
+                sender.sendMessage(new ConfigPuller("messages")
                         .getStringWithPrefix("set_win_height_success")
                         .replace("{arena_name}", arenaName)
                         .replace("{height}", Integer.toString(height)));
                 return true;
             } catch (NumberFormatException e) {
-                player.sendMessage(new ConfigPuller("messages").getStringWithPrefix("set_win_height_wrong_args"));
+                sender.sendMessage(new ConfigPuller("messages").getStringWithPrefix("set_win_height_wrong_args"));
                 return true;
             }
         }
 
+        if(args[0].equals("createroom")) {
+            if(args.length != 2) {
+                sender.sendMessage(new ConfigPuller("messages").getStringWithPrefix("create_room_wrong_usage"));
+                return true;
+            }
 
+            String arenaName = args[1];
+            ArenaModel arena = ArenasList.getArenaByName(arenaName);
+            try {
+                arena.open(); // This method will automatically open the arena and create a room for it
+            } catch (Throwable e) {
+                sender.sendMessage(e.getMessage());
+                return true;
+            }
+
+            sender.sendMessage(new ConfigPuller("messages").getStringWithPrefix("create_room_success").replace("{arena_name}", arenaName));
+            return true;
+        }
 
         sender.sendMessage(new ConfigPuller("messages").getString("invalid_command"));
         return true;

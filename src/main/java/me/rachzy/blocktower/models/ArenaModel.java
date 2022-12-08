@@ -1,15 +1,13 @@
 package me.rachzy.blocktower.models;
 
+import me.rachzy.blocktower.data.Rooms;
 import me.rachzy.blocktower.files.Arenas;
 import me.rachzy.blocktower.functions.ConfigPuller;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class ArenaModel {
     private final String name;
@@ -59,7 +57,7 @@ public class ArenaModel {
 
     public void setArenaFile(String key, Object value) {
         FileConfiguration arenasConfig = Arenas.get();
-        arenasConfig.addDefault(String.format("arenas.%s.%s", getName(), key), value);
+        arenasConfig.addDefault(String.format("arenas.%s.%s", this.getName(), key), value);
         Arenas.save();
     }
 
@@ -69,19 +67,21 @@ public class ArenaModel {
     }
 
     public void createNewSpawn(String spawnId, Location location) {
-        System.out.println(location.getBlock().getType().toString());
         setArenaFile(String.format("spawns.%s.x", spawnId), location.getBlockX());
         setArenaFile(String.format("spawns.%s.y", spawnId), location.getBlockY());
         setArenaFile(String.format("spawns.%s.z", spawnId), location.getBlockZ());
         setArenaFile(String.format("spawns.%s.block", spawnId), (location.getBlock().getType().toString()));
+        this.addSlotAmount();
     }
 
     public void open() throws Throwable {
-        if(this.slotAmount < 2) {
-            throw new Exception(new ConfigPuller("messages").getString("not_enough_slots_to_open"));
+        if(this.getSlotAmount() < 2) {
+            throw new Exception(new ConfigPuller("messages").getStringWithPrefix("not_enough_slots_to_open"));
         }
+
         this.isOpen = true;
         setArenaFile("open", true);
+        Rooms.create(this);
     }
 
     public void close() {

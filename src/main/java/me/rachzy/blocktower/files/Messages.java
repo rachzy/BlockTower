@@ -42,6 +42,8 @@ public class Messages {
         messagesFile.addDefault("set_win_height_wrong_args", "&cThe height value must be an integer!");
         messagesFile.addDefault("set_win_height_invalid_height", "&cThe height value must range from 0 to 256!");
         messagesFile.addDefault("set_win_height_success", "&aYou've set the win height of {arena_name} to {height}");
+        messagesFile.addDefault("create_room_wrong_usage", "&cUse: /blocktower createroom <:arena_name>");
+        messagesFile.addDefault("create_room_success", "&aThe room {arena_name} was successfully created and now is open to play!");
     }
 
     public static FileConfiguration get() {

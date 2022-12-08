@@ -1,6 +1,7 @@
 package me.rachzy.blocktower;
 
 import me.rachzy.blocktower.commands.BlocktowerCommand;
+import me.rachzy.blocktower.data.Rooms;
 import me.rachzy.blocktower.files.Arenas;
 import me.rachzy.blocktower.files.Messages;
 import org.bukkit.Utility;
@@ -31,6 +32,9 @@ public final class BlockTower extends JavaPlugin {
         Arenas.setup();
         Arenas.get().options().copyDefaults(true);
         Arenas.save();
+
+        // Setup Rooms
+        Rooms.setup();
 
         // Register commands
         getCommand("blocktower").setExecutor(new BlocktowerCommand());
