@@ -1,0 +1,11 @@
+name: BlockTower
+version: '${project.version}'
+main: me.rachzy.blocktower.BlockTower
+api-version: 1.19
+authors: [ rachzy ]
+description: A minecraft minigame that the players have to create a tower with blocks, and the first one who hit a certain height with their towers, wins. PvP is enabled and they will all receive some items during the game, which allows them to take each other down.
+website: https://github.com/rachzy/BlockTower
+commands:
+  blocktower:
+    description: Shows a list of available commands for BlockTower plugin
+    usage: /<command>
