@@ -269,6 +269,24 @@ public class BlocktowerCommand implements CommandExecutor {
             return true;
         }
 
+        // Code chunk for leavequeue
+        if(args[0].equals("leavequeue")) {
+            Player player = (Player) sender;
+            RoomModel playerRoom = Rooms.get()
+                    .stream()
+                    .filter(room -> room.getPlayerByUuid(player.getUniqueId()) != null)
+                    .findFirst()
+                    .orElse(null);
+            if(playerRoom == null) {
+                player.sendMessage(new ConfigPuller("messages").getStringWithPrefix("leavequeue_no_rooms"));
+                return true;
+            }
+
+            playerRoom.removePlayer(player);
+            player.sendMessage(new ConfigPuller("messages").getStringWithPrefix("leavequeue_success"));
+            return true;
+        }
+
         sender.sendMessage(new ConfigPuller("messages").getString("invalid_command"));
         return true;
     }

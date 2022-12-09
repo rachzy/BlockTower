@@ -52,8 +52,11 @@ public class Messages {
         messagesFile.addDefault("play_wrong_usage", "&cUse: /blocktower play <:arena_name>");
         messagesFile.addDefault("full_room", "&cThis room is full!");
         messagesFile.addDefault("play_player_already_in_room", "&cYou're already in this room!");
-        messagesFile.addDefault("play_success", "&aYou've been added to the queue of that room!");
-        messagesFile.addDefault("play_new_player_on_queue", "&a{player_name} &ehas joined in the queue of your room. &a({current_players}/{total_slots})");
+        messagesFile.addDefault("play_success", "&aYou've been added to the queue!");
+        messagesFile.addDefault("new_player_on_queue", "&a{player_name} &ehas been added to the queue. &a({current_players}/{total_slots})");
+        messagesFile.addDefault("player_left_queue", "&a{player_name} &chas left the queue. &a({current_players}/{total_slots})");
+        messagesFile.addDefault("leavequeue_no_rooms", "&cYou're not in a game queue!");
+        messagesFile.addDefault("leavequeue_success", "&cYou left your current game queue.");
     }
 
     public static FileConfiguration get() {

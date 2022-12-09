@@ -5,10 +5,12 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class RoomModel {
     final private ArenaModel arena;
-    private final List<Player> playerList = new ArrayList<>();
+    private List<Player> playerList = new ArrayList<>();
     private final Boolean isStarted = false;
     private Player winner;
 
@@ -46,14 +48,40 @@ public class RoomModel {
         playerList.add(player);
         player.sendMessage(new ConfigPuller("messages").getStringWithPrefix("play_success"));
 
+        this.broadcastMessage(new ConfigPuller("messages")
+                .getString("new_player_on_queue")
+                .replace("{player_name}", player.getDisplayName())
+                .replace("{current_players}", String.valueOf(this.getCurrentPlayersAmount()))
+                .replace("{total_slots}", String.valueOf(this.arena.getSlotAmount()))
+        );
+    }
+
+    public Player getPlayerByUuid(UUID uuid) {
+        Player player = this.getPlayerList()
+                .stream()
+                .filter(playerInRoom -> playerInRoom.getUniqueId() == uuid)
+                .findFirst()
+                .orElse(null);
+        return player;
+    }
+
+    public void broadcastMessage(String message) {
         playerList.forEach(playerInRoom -> {
-            playerInRoom.sendMessage(
-                    new ConfigPuller("messages")
-                            .getString("play_new_player_on_queue")
-                            .replace("{player_name}", player.getDisplayName())
-                            .replace("{current_players}", String.valueOf(this.getCurrentPlayersAmount()))
-                            .replace("{total_slots}", String.valueOf(this.arena.getSlotAmount()))
-            );
+            playerInRoom.sendMessage(message);
         });
+    }
+
+    public void removePlayer(Player player) {
+        this.playerList = this.getPlayerList()
+                .stream()
+                .filter(playerInRoom ->
+                        playerInRoom.getUniqueId() != player.getUniqueId()).collect(Collectors.toList()
+                );
+        this.broadcastMessage(new ConfigPuller("messages")
+                .getString("player_left_queue")
+                .replace("{player_name}", player.getDisplayName())
+                .replace("{current_players}", String.valueOf(this.getCurrentPlayersAmount()))
+                .replace("{total_slots}", String.valueOf(this.arena.getSlotAmount()))
+        );
     }
 }
