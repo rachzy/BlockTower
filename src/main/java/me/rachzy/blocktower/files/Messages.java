@@ -30,7 +30,6 @@ public class Messages {
         messagesFile.addDefault("invalid_arena_name", "&cCouldn't find an arena with that name!");
         messagesFile.addDefault("create_arena_wrong_usage", "&cUse: /blocktower createarena <:arena_name>");
         messagesFile.addDefault("arena_created", "&aThe world of your arena has been successfully created!");
-        messagesFile.addDefault("not_enough_slots_to_open", "&cThe room needs to have at least 2 slots to be opened! (Use: '/blocktower setspawn' to create player spawns)");
         messagesFile.addDefault("arena_name_already_in_use", "&cThis room name is already in use!");
         messagesFile.addDefault("set_spawn_wrong_usage", "&cUse: /blocktower setspawn <:arena_name> <:spawn_number>");
         messagesFile.addDefault("set_spawn_invalid_args", "&cThe number of the spawn has to be an integer!");
@@ -43,11 +42,18 @@ public class Messages {
         messagesFile.addDefault("set_win_height_invalid_height", "&cThe height value must range from 0 to 256!");
         messagesFile.addDefault("set_win_height_success", "&aYou've set the win height of {arena_name} to {height}");
         messagesFile.addDefault("create_room_wrong_usage", "&cUse: /blocktower createroom <:arena_name>");
+        messagesFile.addDefault("not_enough_slots_to_open", "&cThe arena needs to have at least 2 slots to be opened! (Use: '/blocktower setspawn' to create player spawns)");
+        messagesFile.addDefault("null_win_height", "&cYou need to set a winheight for the arena! (Use: '/blocktower setwinheight {arena_name} <:height>')");
         messagesFile.addDefault("create_room_already_created", "&cThis room is already created and open!");
         messagesFile.addDefault("create_room_success", "&aThe room {arena_name} was successfully created and now is open to play!");
         messagesFile.addDefault("delete_room_wrong_usage", "&cUse: /blocktower deleteroom <:arena_name>");
         messagesFile.addDefault("delete_room_not_found", "&cCouldn't find an open room for that arena.");
         messagesFile.addDefault("delete_room_success", "&aThe room {arena_name} was successfully deleted!");
+        messagesFile.addDefault("play_wrong_usage", "&cUse: /blocktower play <:arena_name>");
+        messagesFile.addDefault("full_room", "&cThis room is full!");
+        messagesFile.addDefault("play_player_already_in_room", "&cYou're already in this room!");
+        messagesFile.addDefault("play_success", "&aYou've been added to the queue of that room!");
+        messagesFile.addDefault("play_new_player_on_queue", "&a{player_name} &ehas joined in the queue of your room. &a({current_players}/{total_slots})");
     }
 
     public static FileConfiguration get() {

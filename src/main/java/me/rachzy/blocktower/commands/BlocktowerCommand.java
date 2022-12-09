@@ -5,6 +5,7 @@ import me.rachzy.blocktower.data.Rooms;
 import me.rachzy.blocktower.files.Arenas;
 import me.rachzy.blocktower.functions.ConfigPuller;
 import me.rachzy.blocktower.models.ArenaModel;
+import me.rachzy.blocktower.models.RoomModel;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;
@@ -60,6 +61,15 @@ public class BlocktowerCommand implements CommandExecutor {
                 || args[0].equals("createroom")
                 || args[0].equals("deleteroom"))
                 && !sender.hasPermission("blocktower.admin")
+        ) {
+            sender.sendMessage(new ConfigPuller("messages").getStringWithPrefix("no_permission"));
+            return true;
+        }
+
+        if((args[0].equals("play")
+                || args[0].equals("leavequeue")
+                || args[0].equals("opengui"))
+                && !sender.hasPermission("blocktower.play")
         ) {
             sender.sendMessage(new ConfigPuller("messages").getStringWithPrefix("no_permission"));
             return true;
@@ -236,6 +246,26 @@ public class BlocktowerCommand implements CommandExecutor {
 
             arena.close();
             sender.sendMessage(new ConfigPuller("messages").getStringWithPrefix("delete_room_success").replace("{arena_name}", arenaName));
+            return true;
+        }
+
+        // Code chunk for play
+        if(args[0].equals("play")) {
+            Player player = (Player) sender;
+            if(args.length != 2) {
+                player.sendMessage(new ConfigPuller("messages").getStringWithPrefix("play_wrong_usage"));
+                return true;
+            }
+
+            String roomName = args[1];
+
+            RoomModel room = Rooms.getRoomByName(roomName);
+            try {
+                room.addPlayer(player);
+            } catch (Exception e) {
+                player.sendMessage(e.getMessage());
+            }
+
             return true;
         }
 

@@ -79,6 +79,10 @@ public class ArenaModel {
             throw new Exception(new ConfigPuller("messages").getStringWithPrefix("not_enough_slots_to_open"));
         }
 
+        if(this.getWinHeight() == null) {
+            throw new Exception(new ConfigPuller("messages").getStringWithPrefix("null_win_height").replace("{arena_name}", this.getName()));
+        }
+
         this.isOpen = true;
         setArenaFile("isOpen", true);
         Rooms.create(this);

@@ -20,7 +20,7 @@ public class ConfigPuller {
     }
 
     public String getPrefix(Boolean withArrows) {
-        return mainConfig.getString("plugin_prefix").concat(withArrows ? " §7§l>> " : "");
+        return ChatColor.translateAlternateColorCodes('&', mainConfig.getString("plugin_prefix").concat(withArrows ? " §7§l>> " : ""));
     }
 
     public String getString(String key) {

@@ -2,13 +2,14 @@ package me.rachzy.blocktower.data;
 
 import me.rachzy.blocktower.files.Arenas;
 import me.rachzy.blocktower.models.ArenaModel;
+import me.rachzy.blocktower.models.RoomModel;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Rooms {
-    final static List<ArenaModel> RoomList = new ArrayList<>();
+    final static List<RoomModel> RoomList = new ArrayList<>();
 
     public static void setup() {
         FileConfiguration arenasConfig = Arenas.get();
@@ -21,10 +22,14 @@ public class Rooms {
     }
 
     public static void create(ArenaModel arena) {
-        RoomList.add(arena);
+        RoomList.add(new RoomModel(arena));
     }
 
-    public static List<ArenaModel> get() {
+    public static RoomModel getRoomByName(String roomName) {
+        return RoomList.stream().filter(room -> room.getName().equals(roomName)).findFirst().orElse(null);
+    }
+
+    public static List<RoomModel> get() {
         return RoomList;
     }
 }
