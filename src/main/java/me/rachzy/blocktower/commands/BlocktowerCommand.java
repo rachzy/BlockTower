@@ -12,6 +12,12 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class BlocktowerCommand implements CommandExecutor {
     @Override
@@ -283,7 +289,39 @@ public class BlocktowerCommand implements CommandExecutor {
             }
 
             playerRoom.removePlayer(player);
-            player.sendMessage(new ConfigPuller("messages").getStringWithPrefix("leavequeue_success"));
+            return true;
+        }
+
+        // Code chunk for opengui
+        if(args[0].equals("opengui")) {
+            Player player = (Player) sender;
+
+            String GuiTitle = new ConfigPuller("config").getString("gui_title");
+            Inventory roomsGui = Bukkit.createInventory(null, 45, GuiTitle);
+
+            Rooms.get().forEach(room -> {
+                int index = Rooms.get().indexOf(room);
+                if(room.isOpen()) {
+                    ItemStack openRoomItem = new ItemStack(Material.matchMaterial(new ConfigPuller("config").getString("open_room_item")));
+                    ItemMeta openRoomItemMeta = openRoomItem.getItemMeta();
+
+                    openRoomItemMeta.setDisplayName(String.format("§a%s", room.getName()));
+                    List<String> lore = new ArrayList<>();
+                    new ConfigPuller("config").getList("open_room_item_lore").forEach(line -> {
+                        lore.add(line
+                                .replace("{current_players}", room.getCurrentPlayersAmount().toString())
+                                .replace("{total_slots}", room.getArena().getSlotAmount().toString())
+                        );
+                    });
+                    openRoomItemMeta.setLore(lore);
+
+                    openRoomItem.setItemMeta(openRoomItemMeta);
+
+                    roomsGui.setItem(index + 10, openRoomItem);
+                }
+            });
+
+            player.openInventory(roomsGui);
             return true;
         }
 

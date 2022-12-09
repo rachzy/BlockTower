@@ -1,5 +1,6 @@
 package me.rachzy.blocktower.models;
 
+import me.rachzy.blocktower.data.Rooms;
 import me.rachzy.blocktower.functions.ConfigPuller;
 import org.bukkit.entity.Player;
 
@@ -22,12 +23,28 @@ public class RoomModel {
         return this.arena.getName();
     }
 
+    public ArenaModel getArena() {
+        return this.arena;
+    }
+
     public List<Player> getPlayerList() {
         return playerList;
     }
 
     public Integer getCurrentPlayersAmount() {
         return this.getPlayerList().toArray().length;
+    }
+
+
+
+    public Boolean isOpen() {
+        return this.arena.getOpen();
+    }
+
+    public void broadcastMessage(String message) {
+        playerList.forEach(playerInRoom -> {
+            playerInRoom.sendMessage(message);
+        });
     }
 
     public void addPlayer(Player player) throws Exception {
@@ -44,6 +61,11 @@ public class RoomModel {
         if(this.getCurrentPlayersAmount() >= this.arena.getSlotAmount()) {
             throw new Exception(new ConfigPuller("messages").getStringWithPrefix("full_room"));
         }
+
+        Rooms.get()
+                .stream()
+                .filter(room -> room.getPlayerByUuid(player.getUniqueId()) != null)
+                .findFirst().ifPresent(room -> room.removePlayer(player));
 
         playerList.add(player);
         player.sendMessage(new ConfigPuller("messages").getStringWithPrefix("play_success"));
@@ -65,18 +87,13 @@ public class RoomModel {
         return player;
     }
 
-    public void broadcastMessage(String message) {
-        playerList.forEach(playerInRoom -> {
-            playerInRoom.sendMessage(message);
-        });
-    }
-
     public void removePlayer(Player player) {
         this.playerList = this.getPlayerList()
                 .stream()
                 .filter(playerInRoom ->
                         playerInRoom.getUniqueId() != player.getUniqueId()).collect(Collectors.toList()
                 );
+        player.sendMessage(new ConfigPuller("messages").getStringWithPrefix("leavequeue_success"));
         this.broadcastMessage(new ConfigPuller("messages")
                 .getString("player_left_queue")
                 .replace("{player_name}", player.getDisplayName())

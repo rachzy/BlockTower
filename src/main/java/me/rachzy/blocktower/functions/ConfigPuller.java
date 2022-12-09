@@ -5,6 +5,9 @@ import me.rachzy.blocktower.files.Messages;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ConfigPuller {
     public static FileConfiguration config;
     public static FileConfiguration mainConfig = BlockTower.getPlugin(BlockTower.class).getConfig();
@@ -29,5 +32,15 @@ public class ConfigPuller {
 
     public String getStringWithPrefix(String key) {
         return getPrefix(true).concat(ChatColor.translateAlternateColorCodes('&', config.getString(key)));
+    }
+
+    public List<String> getList(String key) {
+        List<String> listWithColors = new ArrayList<>();
+
+        for(String s : config.getStringList(key)) {
+            listWithColors.add(ChatColor.translateAlternateColorCodes('&', s));
+        }
+
+        return listWithColors;
     }
 }

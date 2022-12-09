@@ -1,1 +1,13 @@
+# The prefix that will appear right behind every message in the plugin
 plugin_prefix: "&9&lBlock&b&lTower"
+
+# The title of the chest inventory of the rooms GUI that will show up when the player
+# uses the opengui command
+gui_title: "&b&lRooms"
+
+# Item type that corresponds to an open room
+open_room_item: "EMERALD"
+open_room_item_lore:
+  - "&e({current_players}/{total_slots})"
+  - ""
+  - "&bClick to join!"
