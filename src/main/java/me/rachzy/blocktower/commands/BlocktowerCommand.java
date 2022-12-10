@@ -39,7 +39,7 @@ public class BlocktowerCommand implements CommandExecutor {
             sender.sendMessage("");
             sender.sendMessage("§e§lPlayer commands:");
             sender.sendMessage("§a/blocktower play <arena_name>§2: §7Puts the player in a queue for a room");
-            sender.sendMessage("§a/blocktower leavequeue§2: §7Leaves from the current queue");
+            sender.sendMessage("§a/blocktower quit§2: §7Leaves a room");
             sender.sendMessage("§a/blocktower opengui§2: §7Open the GUI that shows all the current active rooms");
             sender.sendMessage("§f====================================================");
             return true;
@@ -51,7 +51,7 @@ public class BlocktowerCommand implements CommandExecutor {
                 || args[0].equals("setspawn")
                 || args[0].equals("setheight")
                 || args[0].equals("play")
-                || args[0].equals("leavequeue")
+                || args[0].equals("quit")
                 || args[0].equals("opengui"))
                 && !(sender instanceof Player)
         ) {
@@ -74,7 +74,7 @@ public class BlocktowerCommand implements CommandExecutor {
         }
 
         if((args[0].equals("play")
-                || args[0].equals("leavequeue")
+                || args[0].equals("quit")
                 || args[0].equals("opengui"))
                 && !sender.hasPermission("blocktower.play")
         ) {
@@ -292,8 +292,8 @@ public class BlocktowerCommand implements CommandExecutor {
             return true;
         }
 
-        // Code chunk for leavequeue
-        if(args[0].equals("leavequeue")) {
+        // Code chunk for quit
+        if(args[0].equals("quit")) {
             Player player = (Player) sender;
             RoomModel playerRoom = Rooms.get()
                     .stream()
@@ -301,7 +301,7 @@ public class BlocktowerCommand implements CommandExecutor {
                     .findFirst()
                     .orElse(null);
             if(playerRoom == null) {
-                player.sendMessage(new ConfigPuller("messages").getStringWithPrefix("leavequeue_no_rooms"));
+                player.sendMessage(new ConfigPuller("messages").getStringWithPrefix("quit_no_rooms"));
                 return true;
             }
 

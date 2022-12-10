@@ -48,7 +48,6 @@ public class ArenaModel {
     }
 
     public HashMap<String, Object> getSpawnById(Integer spawnId) {
-        System.out.println(spawns);
         Object[] spawnsToArray = spawns.toArray();
         if(spawnsToArray.length >= spawnId - 1) {
             return spawns.get(spawnId);

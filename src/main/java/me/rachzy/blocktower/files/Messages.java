@@ -56,9 +56,10 @@ public class Messages {
         messagesFile.addDefault("play_success", "&aYou've been added to the queue!");
         messagesFile.addDefault("new_player_on_queue", "&a{player_name} &ehas been added to the queue. &a({current_players}/{total_slots})");
         messagesFile.addDefault("player_left_queue", "&a{player_name} &chas left the queue. &a({current_players}/{total_slots})");
-        messagesFile.addDefault("leavequeue_no_rooms", "&cYou're not in a game queue!");
-        messagesFile.addDefault("leavequeue_success", "&cYou left your current game queue.");
+        messagesFile.addDefault("quit_no_rooms", "&cYou're not in a game queue!");
+        messagesFile.addDefault("quit_success", "&cYou left your current game.");
         messagesFile.addDefault("game_starting", "&bThe game will start in &e{time_in_seconds} seconds.");
+        messagesFile.addDefault("player_left_game", "&6{player_name} &cleft the game. &b({current_players}/{total_slots})");
     }
 
     public static FileConfiguration get() {
