@@ -52,14 +52,18 @@ public class Messages {
         messagesFile.addDefault("delete_room_success", "&aThe room {arena_name} was successfully deleted!");
         messagesFile.addDefault("play_wrong_usage", "&cUse: /blocktower play <:arena_name>");
         messagesFile.addDefault("full_room", "&cThis room is full!");
+        messagesFile.addDefault("resetting_room", "&cThis room is reseting, you can't join yet!");
+        messagesFile.addDefault("ongame_room", "&cThis room already started!");
         messagesFile.addDefault("play_player_already_in_room", "&cYou're already in this room!");
         messagesFile.addDefault("play_success", "&aYou've been added to the queue!");
         messagesFile.addDefault("new_player_on_queue", "&a{player_name} &ehas been added to the queue. &a({current_players}/{total_slots})");
         messagesFile.addDefault("player_left_queue", "&a{player_name} &chas left the queue. &a({current_players}/{total_slots})");
         messagesFile.addDefault("quit_no_rooms", "&cYou're not in a game queue!");
         messagesFile.addDefault("quit_success", "&cYou left your current game.");
-        messagesFile.addDefault("game_starting", "&bThe game will start in &e{time_in_seconds} seconds.");
+        messagesFile.addDefault("game_starting_countdown", "&bThe game will start in &e{time_in_seconds} seconds.");
         messagesFile.addDefault("player_left_game", "&6{player_name} &cleft the game. &b({current_players}/{total_slots})");
+        messagesFile.addDefault("game_freezetime_subtitle", "&bStarting in &e{time_in_seconds}...");
+        messagesFile.addDefault("game_started_title", "&a&lFight!");
     }
 
     public static FileConfiguration get() {

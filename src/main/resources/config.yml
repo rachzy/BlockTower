@@ -18,8 +18,8 @@ full_room_item_lore:
   - ""
   - "&cThis room is full"
 
-reseting_room_item: "IRON_INGOT"
-reseting_room_item_lore:
+resetting_room_item: "IRON_INGOT"
+resetting_room_item_lore:
   - "&e({current_players}/{total_slots})"
   - ""
   - "&7This room is reseting..."

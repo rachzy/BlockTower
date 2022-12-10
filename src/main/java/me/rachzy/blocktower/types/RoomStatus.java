@@ -4,5 +4,5 @@ public enum RoomStatus {
     OPEN,
     ONGAME,
     FULL,
-    RESETING
+    RESETTING
 }
