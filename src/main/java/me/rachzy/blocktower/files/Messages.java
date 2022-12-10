@@ -46,6 +46,7 @@ public class Messages {
         messagesFile.addDefault("null_win_height", "&cYou need to set a winheight for the arena! (Use: '/blocktower setwinheight {arena_name} <:height>')");
         messagesFile.addDefault("create_room_already_created", "&cThis room is already created and open!");
         messagesFile.addDefault("create_room_success", "&aThe room {arena_name} was successfully created and now is open to play!");
+        messagesFile.addDefault("force_start_room_not_found", "&cYou have to be in a room to use that!");
         messagesFile.addDefault("delete_room_wrong_usage", "&cUse: /blocktower deleteroom <:arena_name>");
         messagesFile.addDefault("delete_room_not_found", "&cCouldn't find an open room for that arena.");
         messagesFile.addDefault("delete_room_success", "&aThe room {arena_name} was successfully deleted!");
@@ -57,6 +58,7 @@ public class Messages {
         messagesFile.addDefault("player_left_queue", "&a{player_name} &chas left the queue. &a({current_players}/{total_slots})");
         messagesFile.addDefault("leavequeue_no_rooms", "&cYou're not in a game queue!");
         messagesFile.addDefault("leavequeue_success", "&cYou left your current game queue.");
+        messagesFile.addDefault("game_starting", "&bThe game will start in &e{time_in_seconds} seconds.");
     }
 
     public static FileConfiguration get() {

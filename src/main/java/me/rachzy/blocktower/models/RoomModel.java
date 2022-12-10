@@ -2,19 +2,20 @@ package me.rachzy.blocktower.models;
 
 import me.rachzy.blocktower.data.Rooms;
 import me.rachzy.blocktower.functions.ConfigPuller;
-import me.rachzy.blocktower.types.RoomType;
+import me.rachzy.blocktower.types.RoomStatus;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class RoomModel {
     final private ArenaModel arena;
     private List<Player> playerList = new ArrayList<>();
-    private RoomType roomType = RoomType.OPEN;
+    private RoomStatus roomStatus = RoomStatus.OPEN;
+    private Thread countdownThread;
     private Player winner;
 
     public RoomModel(ArenaModel arena) {
@@ -25,8 +26,8 @@ public class RoomModel {
         return this.arena.getName();
     }
 
-    public RoomType getRoomType() {
-        return this.roomType;
+    public RoomStatus getRoomStatus() {
+        return this.roomStatus;
     }
 
     public ArenaModel getArena() {
@@ -42,12 +43,18 @@ public class RoomModel {
     }
 
     public Boolean isOpen() {
-        return this.roomType == RoomType.OPEN;
+        return this.roomStatus == RoomStatus.OPEN;
     }
 
     public void broadcastMessage(String message) {
         playerList.forEach(playerInRoom -> {
             playerInRoom.sendMessage(message);
+        });
+    }
+
+    public void broadcastSound(Sound sound) {
+        playerList.forEach(playerInRoom -> {
+            playerInRoom.playSound(playerInRoom.getLocation(), sound, 3.0F, 0.5F);
         });
     }
 
@@ -73,6 +80,7 @@ public class RoomModel {
 
         playerList.add(player);
         player.sendMessage(new ConfigPuller("messages").getStringWithPrefix("play_success"));
+        player.playSound(player.getLocation(), Sound.LEVEL_UP, 3.0F, 0.5F);
 
         this.broadcastMessage(new ConfigPuller("messages")
                 .getString("new_player_on_queue")
@@ -82,7 +90,11 @@ public class RoomModel {
         );
 
         if(this.getCurrentPlayersAmount() == this.getArena().getSlotAmount()) {
-            this.setRoomType(RoomType.FULL);
+            this.setRoomStatus(RoomStatus.FULL);
+        }
+
+        if(this.getCurrentPlayersAmount() == this.getArena().getSlotAmount() || this.getCurrentPlayersAmount() >= 3) {
+            this.startGameCounter(20);
         }
     }
 
@@ -109,10 +121,61 @@ public class RoomModel {
                 .replace("{total_slots}", String.valueOf(this.arena.getSlotAmount()))
         );
 
-        this.setRoomType(RoomType.OPEN);
+        this.setRoomStatus(RoomStatus.OPEN);
+
+        if(this.getCurrentPlayersAmount() != this.getArena().getSlotAmount() && this.getCurrentPlayersAmount() < 3) {
+            this.countdownThread.interrupt();
+        }
     }
 
-    public void setRoomType(RoomType roomType) {
-        this.roomType = roomType;
+    public void setRoomStatus(RoomStatus roomStatus) {
+        this.roomStatus = roomStatus;
+    }
+
+    public void startGameCounter(Integer seconds) {
+        this.countdownThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    for(int i = seconds; i >= 0; i--) {
+                        Thread.sleep(1000);
+                        if(i == 30 || i == 15 || i == 10 || (i <= 5 && i != 0)) {
+                            broadcastMessage(new ConfigPuller("messages")
+                                    .getString("game_starting")
+                                    .replace("{time_in_seconds}", String.valueOf(i))
+                            );
+                            broadcastSound(Sound.ORB_PICKUP);
+                        }
+                    }
+                    startGame();
+                } catch (InterruptedException e) {
+                    //
+                }
+            }
+        });
+        this.countdownThread.start();
+    }
+
+    public void startGame() {
+        // Set the room status
+        this.setRoomStatus(RoomStatus.ONGAME);
+
+        // Teleport players
+        int playerIndex = 0;
+        for(Player player : this.getPlayerList()) {
+            int getX = (int) this.getArena().getSpawnById(playerIndex).get("x");
+            int getY = (int) this.getArena().getSpawnById(playerIndex).get("y");
+            int getZ = (int) this.getArena().getSpawnById(playerIndex).get("z");
+            World getArenaWorld = Bukkit.getWorld(this.getName());
+
+            Location spawnLocation = new Location(getArenaWorld, getX, getY, getZ);
+
+            player.teleport(spawnLocation);
+            playerIndex++;
+        }
+
+        if(this.countdownThread != null && this.countdownThread.isAlive()) {
+            this.countdownThread.interrupt();
+        }
     }
 }

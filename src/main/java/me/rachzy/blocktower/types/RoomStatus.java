@@ -1,6 +1,6 @@
 package me.rachzy.blocktower.types;
 
-public enum RoomType {
+public enum RoomStatus {
     OPEN,
     ONGAME,
     FULL,

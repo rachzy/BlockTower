@@ -4,6 +4,7 @@ import me.rachzy.blocktower.files.Arenas;
 import me.rachzy.blocktower.models.ArenaModel;
 import me.rachzy.blocktower.models.RoomModel;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,5 +32,12 @@ public class Rooms {
 
     public static List<RoomModel> get() {
         return RoomList;
+    }
+
+    public static RoomModel getRoomByPlayer(Player player) {
+        return RoomList.stream()
+                .filter(room -> room.getPlayerByUuid(player.getUniqueId()) != null)
+                .findFirst()
+                .orElse(null);
     }
 }

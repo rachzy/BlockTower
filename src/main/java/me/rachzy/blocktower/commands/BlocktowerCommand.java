@@ -35,6 +35,7 @@ public class BlocktowerCommand implements CommandExecutor {
             sender.sendMessage("§a/blocktower setwinheight <arena_name> <height>§2: §7Sets the height that a player have to reach to win a game");
             sender.sendMessage("§a/blocktower createroom <arena_name>§2: §7Creates a room for an arena");
             sender.sendMessage("§a/blocktower deleteroom <arena_name>§2: §7Deletes a room");
+            sender.sendMessage("§a/blocktower forcestart <arena_name>§2: §7Forces a room to start");
             sender.sendMessage("");
             sender.sendMessage("§e§lPlayer commands:");
             sender.sendMessage("§a/blocktower play <arena_name>§2: §7Puts the player in a queue for a room");
@@ -64,7 +65,8 @@ public class BlocktowerCommand implements CommandExecutor {
                 || args[0].equals("setspawn")
                 || args[0].equals("setheight")
                 || args[0].equals("createroom")
-                || args[0].equals("deleteroom"))
+                || args[0].equals("deleteroom")
+                || args[0].equals("forcestart"))
                 && !sender.hasPermission("blocktower.admin")
         ) {
             sender.sendMessage(new ConfigPuller("messages").getStringWithPrefix("no_permission"));
@@ -86,6 +88,7 @@ public class BlocktowerCommand implements CommandExecutor {
                 || args[0].equals("setwinheight")
                 || args[0].equals("createroom")
                 || args[0].equals("deleteroom")
+                || args[0].equals("forcestart")
                 || args[0].equals("play")
         ) {
             if(args.length > 1 && ArenasList.getArenaByName(args[1]) == null) {
@@ -138,10 +141,6 @@ public class BlocktowerCommand implements CommandExecutor {
             }
             String arenaName = args[1];
             World getArenaWorld = Bukkit.getWorld(arenaName);
-
-            if(getArenaWorld == null) {
-                getArenaWorld = Bukkit.createWorld(new WorldCreator(arenaName).type(WorldType.FLAT).generatorSettings("2;0;1;"));
-            }
 
             player.teleport(new Location(getArenaWorld, 0, 50, 0));
             player.sendMessage(new ConfigPuller("messages").getStringWithPrefix("edit_arena_teleport").replace("{arena_name}", arenaName));
@@ -254,6 +253,25 @@ public class BlocktowerCommand implements CommandExecutor {
             return true;
         }
 
+        // Code chunk for forcestart
+        if(args[0].equals("forcestart")) {
+            RoomModel targetRoom;
+            if(args.length == 1) {
+                if(!(sender instanceof Player) || Rooms.getRoomByPlayer((Player) sender) == null){
+                    sender.sendMessage(new ConfigPuller("messages").getStringWithPrefix("force_start_room_not_found"));
+                    return true;
+                }
+                targetRoom = Rooms.getRoomByPlayer((Player) sender);
+            } else {
+                targetRoom = Rooms.getRoomByName(args[1]);
+            }
+
+            if(targetRoom != null) {
+                targetRoom.startGame();
+            }
+            return true;
+        }
+
         // Code chunk for play
         if(args[0].equals("play")) {
             Player player = (Player) sender;
@@ -310,7 +328,7 @@ public class BlocktowerCommand implements CommandExecutor {
                     saltSlots = 14;
                 }
 
-                roomsGui.setItem(index + saltSlots, RoomItem.get(room.getRoomType(), room));
+                roomsGui.setItem(index + saltSlots, RoomItem.get(room.getRoomStatus(), room));
             });
 
             player.openInventory(roomsGui);

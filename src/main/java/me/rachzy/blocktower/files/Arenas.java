@@ -4,8 +4,7 @@ import me.rachzy.blocktower.data.ArenasList;
 import me.rachzy.blocktower.data.Rooms;
 import me.rachzy.blocktower.functions.ConfigPuller;
 import me.rachzy.blocktower.models.ArenaModel;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -35,27 +34,17 @@ public class Arenas {
 
         arenasFile = YamlConfiguration.loadConfiguration(file);
 
-        // Create example arena
-        Map<String, Object> exampleArena = new HashMap<>();
-        exampleArena.put("arenas.example.name", "example");
-        exampleArena.put("arenas.example.playerMin", 0);
-        exampleArena.put("arenas.example.slotAmount", 0);
-        exampleArena.put("arenas.example.winHeight", 120);
-        exampleArena.put("arenas.example.isOpen", false);
-        exampleArena.put("arenas.example.spawns.1.x", 120);
-        exampleArena.put("arenas.example.spawns.1.y", 60);
-        exampleArena.put("arenas.example.spawns.1.z", 120);
-
-        arenasFile.addDefaults(exampleArena);
-
         // Load arenas
         for(String arenaName : arenasFile.getConfigurationSection("arenas").getKeys(false)) {
             Integer getPlayerMin = arenasFile.getInt(String.format("arenas.%s.playerMin", arenaName));
             Integer getSlotAmount = arenasFile.getInt(String.format("arenas.%s.slotAmount", arenaName));
             Integer getWinHeight = arenasFile.getInt(String.format("arenas.%s.winHeight", arenaName));
             Boolean getArenaOpen = arenasFile.getBoolean(String.format("arenas.%s.isOpen", arenaName));
-            ConfigurationSection getArenaSpawnsSection = arenasFile.getConfigurationSection(String.format("arenas.%s.isOpen.spawns", arenaName));
+            ConfigurationSection getArenaSpawnsSection = arenasFile.getConfigurationSection(String.format("arenas.%s.spawns", arenaName));
             List<HashMap<String, Object>> getArenaSpawns = new ArrayList<>();
+
+            // Load arena world
+            Bukkit.createWorld(new WorldCreator(arenaName).type(WorldType.FLAT).generatorSettings("2;0;1;"));
 
             if(getArenaSpawnsSection != null) {
                 for(String spawnValue : getArenaSpawnsSection.getKeys(false)) {
