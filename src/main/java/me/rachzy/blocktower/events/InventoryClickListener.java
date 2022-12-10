@@ -3,6 +3,7 @@ package me.rachzy.blocktower.events;
 import me.rachzy.blocktower.data.Rooms;
 import me.rachzy.blocktower.functions.ConfigPuller;
 import me.rachzy.blocktower.models.RoomModel;
+import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -17,8 +18,9 @@ public class InventoryClickListener implements Listener {
 
         String inventoryTitle = e.getView().getTitle();
         String roomsGuiName = new ConfigPuller("config").getString("gui_title");
-        System.out.println(inventoryTitle);
-        if(inventoryTitle.equals(roomsGuiName)) {
+        if(inventoryTitle.equals(roomsGuiName)
+                && e.getCurrentItem() != null
+                && e.getCurrentItem().getItemMeta() != null) {
             String getItemName = e.getCurrentItem().getItemMeta().getDisplayName().substring(2);
             RoomModel getRoom = Rooms.getRoomByName(getItemName);
 

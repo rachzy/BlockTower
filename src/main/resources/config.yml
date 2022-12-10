@@ -5,9 +5,27 @@ plugin_prefix: "&9&lBlock&b&lTower"
 # uses the opengui command
 gui_title: "&b&lRooms"
 
-# Item type that corresponds to an open room
+# Configs for rooms
 open_room_item: "EMERALD"
 open_room_item_lore:
   - "&e({current_players}/{total_slots})"
   - ""
   - "&bClick to join!"
+
+full_room_item: "GOLD_INGOT"
+full_room_item_lore:
+  - "&e({current_players}/{total_slots})"
+  - ""
+  - "&cThis room is full"
+
+reseting_room_item: "IRON_INGOT"
+reseting_room_item_lore:
+  - "&e({current_players}/{total_slots})"
+  - ""
+  - "&7This room is reseting..."
+
+ongame_room_item: "REDSTONE"
+ongame_room_item_lore:
+  - "&e({current_players}/{total_slots})"
+  - ""
+  - "&cThis room is currently on game"

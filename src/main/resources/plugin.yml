@@ -9,3 +9,5 @@ commands:
   blocktower:
     description: Shows a list of available commands for BlockTower plugin
     usage: /<command>
+    aliases:
+      - bt

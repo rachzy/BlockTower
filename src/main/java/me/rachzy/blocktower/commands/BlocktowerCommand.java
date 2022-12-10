@@ -4,6 +4,7 @@ import me.rachzy.blocktower.data.ArenasList;
 import me.rachzy.blocktower.data.Rooms;
 import me.rachzy.blocktower.files.Arenas;
 import me.rachzy.blocktower.functions.ConfigPuller;
+import me.rachzy.blocktower.items.RoomItem;
 import me.rachzy.blocktower.models.ArenaModel;
 import me.rachzy.blocktower.models.RoomModel;
 import org.bukkit.*;
@@ -13,8 +14,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -301,24 +300,17 @@ public class BlocktowerCommand implements CommandExecutor {
 
             Rooms.get().forEach(room -> {
                 int index = Rooms.get().indexOf(room);
-                if(room.isOpen()) {
-                    ItemStack openRoomItem = new ItemStack(Material.matchMaterial(new ConfigPuller("config").getString("open_room_item")));
-                    ItemMeta openRoomItemMeta = openRoomItem.getItemMeta();
+                int saltSlots = 10;
 
-                    openRoomItemMeta.setDisplayName(String.format("§a%s", room.getName()));
-                    List<String> lore = new ArrayList<>();
-                    new ConfigPuller("config").getList("open_room_item_lore").forEach(line -> {
-                        lore.add(line
-                                .replace("{current_players}", room.getCurrentPlayersAmount().toString())
-                                .replace("{total_slots}", room.getArena().getSlotAmount().toString())
-                        );
-                    });
-                    openRoomItemMeta.setLore(lore);
-
-                    openRoomItem.setItemMeta(openRoomItemMeta);
-
-                    roomsGui.setItem(index + 10, openRoomItem);
+                if(index >= 7) {
+                    saltSlots = 12;
                 }
+
+                if(index >= 14) {
+                    saltSlots = 14;
+                }
+
+                roomsGui.setItem(index + saltSlots, RoomItem.get(room.getRoomType(), room));
             });
 
             player.openInventory(roomsGui);
