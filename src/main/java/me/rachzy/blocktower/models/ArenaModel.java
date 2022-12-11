@@ -5,9 +5,12 @@ import me.rachzy.blocktower.files.Arenas;
 import me.rachzy.blocktower.functions.ConfigPuller;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
 
+import javax.tools.JavaCompiler;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 public class ArenaModel {
     private final String name;
@@ -16,6 +19,7 @@ public class ArenaModel {
     private Integer winHeight;
     private Boolean isOpen;
     private List<HashMap<String, Object>> spawns;
+    private HashMap<String, Location> editors = new HashMap<>();
 
     public ArenaModel(String name) {
         this.name = name;
@@ -111,5 +115,17 @@ public class ArenaModel {
 
     public void setSpawns(List<HashMap<String, Object>> spawns) {
         this.spawns = spawns;
+    }
+
+    public void addEditor(Player editor) {
+        this.editors.put(editor.getDisplayName(), editor.getLocation());
+    }
+
+    public Location getEditorStoredLocation(Player editor) {
+        return this.editors.get(editor.getDisplayName());
+    }
+
+    public void removeEditor(Player editor) {
+        this.editors.remove(editor.getUniqueId());
     }
 }

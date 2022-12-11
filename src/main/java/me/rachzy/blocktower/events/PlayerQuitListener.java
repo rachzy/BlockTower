@@ -1,5 +1,6 @@
 package me.rachzy.blocktower.events;
 
+import me.rachzy.blocktower.data.ArenasList;
 import me.rachzy.blocktower.data.Rooms;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -13,6 +14,13 @@ public class PlayerQuitListener implements Listener {
         Rooms.get().forEach(room -> {
             if(room.getPlayerByUuid(player.getUniqueId()) != null) {
                 room.removePlayer(player);
+            }
+        });
+
+        ArenasList.getArenas().forEach(arena -> {
+            if(arena.getEditorStoredLocation(player) != null) {
+                player.teleport(arena.getEditorStoredLocation(player));
+                arena.removeEditor(player);
             }
         });
     }

@@ -30,7 +30,8 @@ public class BlocktowerCommand implements CommandExecutor {
             sender.sendMessage("");
             sender.sendMessage("§c§lAdmin commands:");
             sender.sendMessage("§a/blocktower createarena <arena_name>§2: §7Creates an arena");
-            sender.sendMessage("§a/blocktower editarena <arena_name>§2: §7Edits an existing arena by teleporting you to its world");
+            sender.sendMessage("§a/blocktower editarena <arena_name>§2: §7Edits an existing arena by teleporting you to its world.");
+            sender.sendMessage("§a/blocktower savearena <arena_name>§2: §7Save an arena world.");
             sender.sendMessage("§a/blocktower setspawn <arena_name> <spawn_number>§2: §7Creates a player spawn on an arena");
             sender.sendMessage("§a/blocktower setwinheight <arena_name> <height>§2: §7Sets the height that a player have to reach to win a game");
             sender.sendMessage("§a/blocktower createroom <arena_name>§2: §7Creates a room for an arena");
@@ -62,6 +63,7 @@ public class BlocktowerCommand implements CommandExecutor {
         // Check if the player doesn't have permission
         if ((args[0].equals("createarena")
                 || args[0].equals("editarena")
+                || args[0].equals("savearena")
                 || args[0].equals("setspawn")
                 || args[0].equals("setheight")
                 || args[0].equals("createroom")
@@ -85,6 +87,7 @@ public class BlocktowerCommand implements CommandExecutor {
         // Check if there is an arena with that name
         if (args[0].equals("editarena")
                 || args[0].equals("setspawn")
+                || args[0].equals("savearena")
                 || args[0].equals("setwinheight")
                 || args[0].equals("createroom")
                 || args[0].equals("deleteroom")
@@ -139,11 +142,34 @@ public class BlocktowerCommand implements CommandExecutor {
                 player.sendMessage(new ConfigPuller("messages").getStringWithPrefix("edit_arena_wrong_usage"));
                 return true;
             }
-            String arenaName = args[1];
-            World getArenaWorld = Bukkit.getWorld(arenaName);
 
+            ArenaModel arena = ArenasList.getArenaByName(args[1]);
+            World getArenaWorld = Bukkit.getWorld(arena.getName());
+
+            arena.addEditor(player);
             player.teleport(new Location(getArenaWorld, 0, 50, 0));
-            player.sendMessage(new ConfigPuller("messages").getStringWithPrefix("edit_arena_teleport").replace("{arena_name}", arenaName));
+            player.sendMessage(new ConfigPuller("messages").getStringWithPrefix("edit_arena_teleport").replace("{arena_name}", arena.getName()));
+            return true;
+        }
+
+        // Code cunk for savearena command
+        if(args[0].equals("savearena")) {
+            if(args.length != 2) {
+                sender.sendMessage(new ConfigPuller("messages").getStringWithPrefix("save_arena_wrong_usage"));
+                return true;
+            }
+
+            ArenaModel arena = ArenasList.getArenaByName(args[1]);
+            World arenaWorld = Bukkit.getWorld(arena.getName());
+            arenaWorld.save();
+
+            if(sender instanceof Player && arenaWorld.getPlayers().contains((Player) sender)) {
+                Player player = (Player) sender;
+                player.teleport(arena.getEditorStoredLocation(player));
+                arena.removeEditor(player);
+            }
+
+            sender.sendMessage(new ConfigPuller("messages").getStringWithPrefix("save_arena_success").replace("{arena_name}", arena.getName()));
             return true;
         }
 

@@ -37,6 +37,8 @@ public class Messages {
         messagesFile.addDefault("spawn_created", "&aSpawn {spawn_number} successfully created!");
         messagesFile.addDefault("edit_arena_wrong_usage", "&cUse: /blocktower editarena <:arena_name>");
         messagesFile.addDefault("edit_arena_teleport", "&aYou've been teleported to the world of the arena '{arena_name}'!");
+        messagesFile.addDefault("save_arena_wrong_usage", "&cUse: /blocktower savearena <:arena_name>");
+        messagesFile.addDefault("save_arena_success", "&aYou've successfully saved the arena '{arena_name}'!");
         messagesFile.addDefault("set_win_height_wrong_usage", "&cUse: /blocktower setheight <:arena_name> <:height>");
         messagesFile.addDefault("set_win_height_wrong_args", "&cThe height value must be an integer!");
         messagesFile.addDefault("set_win_height_invalid_height", "&cThe height value must range from 0 to 256!");
@@ -64,6 +66,10 @@ public class Messages {
         messagesFile.addDefault("player_left_game", "&6{player_name} &cleft the game. &b({current_players}/{total_slots})");
         messagesFile.addDefault("game_freezetime_subtitle", "&bStarting in &e{time_in_seconds}...");
         messagesFile.addDefault("game_started_title", "&a&lFight!");
+        messagesFile.addDefault("scoreboard_current_height", "&fCurrent height: &e{current_height}");
+        messagesFile.addDefault("scoreboard_win_height", "&fWin height: &a{win_height}");
+        messagesFile.addDefault("scoreboard_kills", "&fKills: &6{player_kills}");
+        messagesFile.addDefault("scoreboard_lives", "&fRemaining lives: &c{player_lives}");
     }
 
     public static FileConfiguration get() {
