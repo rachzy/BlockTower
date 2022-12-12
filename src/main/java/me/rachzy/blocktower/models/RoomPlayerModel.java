@@ -1,5 +1,6 @@
 package me.rachzy.blocktower.models;
 
+import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -12,7 +13,7 @@ import java.util.List;
 
 public class RoomPlayerModel {
     private final Player player;
-    private DyeColor color;
+    private Color color;
     private int lives = 5;
     private int kills = 0;
     private Location spawnLocation;
@@ -28,7 +29,7 @@ public class RoomPlayerModel {
         return player;
     }
 
-    public DyeColor getColor() {
+    public Color getColor() {
         return color;
     }
 
@@ -56,7 +57,7 @@ public class RoomPlayerModel {
         return lastDamageReceived;
     }
 
-    public void setColor(DyeColor color) {
+    public void setColor(Color color) {
         this.color = color;
     }
 

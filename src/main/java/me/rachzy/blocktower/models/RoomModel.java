@@ -235,6 +235,7 @@ public class RoomModel {
 
             player.teleport(storedPlayerLocation);
             player.getInventory().setContents(storedPlayerInventoryItems);
+            player.getInventory().setArmorContents(null);
             player.setGameMode(GameMode.SURVIVAL);
 
             player.updateInventory();
@@ -258,16 +259,21 @@ public class RoomModel {
             this.setRoomStatus(RoomStatus.OPEN);
         }
 
-        if (this.getRoomStatus() == RoomStatus.ONGAME && this.getCurrentPlayersAmount() == 0) {
-            this.endGame();
-        }
-
         if (this.getCurrentPlayersAmount() != this.getArena().getSlotAmount()
                 && this.getCurrentPlayersAmount() < 3
                 && this.countdownThread != null
                 && this.countdownThread.isAlive()
         ) {
             this.countdownThread.interrupt();
+        }
+
+        if (this.getRoomStatus() == RoomStatus.ONGAME) {
+            if(this.getCurrentPlayersAmount() == 1) {
+                this.setWinner(this.getStandingPlayers().stream().findFirst().orElse(null));
+            }
+            if(this.getCurrentPlayersAmount() == 0) {
+                this.endGame();
+            }
         }
     }
 
@@ -375,10 +381,11 @@ public class RoomModel {
             line4.setScore(4);
 
             String[] colorsList = new String[]{
-                    "a", "b", "c", "d"
+                    "a", "c", "d", "e"
             };
+
             playersOrderedByHeight.forEach(playerInRoom -> {
-                if (player.getGameMode() != GameMode.SURVIVAL) return;
+                if (player.getGameMode() != GameMode.SURVIVAL && this.getRoomPlayer(player).getLives() <= 0) return;
 
                 int indexOfPlayer = playersOrderedByHeight.indexOf(playerInRoom);
                 if (indexOfPlayer >= 4) return;
@@ -386,11 +393,11 @@ public class RoomModel {
                 Score top = objective.getScore
                         (String.format("§%s%s. %s §6(%s)",
                                 colorsList[indexOfPlayer],
-                                5 - indexOfPlayer,
+                                indexOfPlayer + 1,
                                 playerInRoom.getDisplayName(),
                                 Math.round(playerInRoom.getLocation().getY()))
                         );
-                top.setScore(5 + indexOfPlayer);
+                top.setScore(8 - indexOfPlayer);
             });
 
             Score line9 = objective.getScore("\u0020\u0020");
@@ -423,7 +430,7 @@ public class RoomModel {
         // To avoid bugs
         if (this.getRoomStatus() == RoomStatus.ONGAME) return;
 
-        // Set the room status
+        // Sets the room status
         this.setRoomStatus(RoomStatus.ONGAME);
 
         // Creates a copy of the original arena world
@@ -435,7 +442,7 @@ public class RoomModel {
         World arenaCopyWorld = Bukkit.getWorld(arenaCopyName);
         arenaCopyWorld.setPVP(true);
 
-        // Teleport players
+        // Teleports players
         int playerIndex = 0;
         for (Player player : this.getPlayerList()) {
             int getX = (int) this.getArena().getSpawnById(playerIndex).get("x");
@@ -453,7 +460,7 @@ public class RoomModel {
             player.teleport(spawnLocation);
             player.getInventory().clear();
 
-            // Give player's items
+            // Gives player's items
             Block playerBlock = player.getLocation().subtract(0, 1, 0).getBlock();
 
             if (playerBlock.getType() != Material.WOOL) {
@@ -464,11 +471,28 @@ public class RoomModel {
             ItemStack wools = new Wool(getWoolColor).toItemStack(64);
             player.getInventory().setItem(0, wools);
 
-            // Set the wool color as the player color
-            this.getRoomPlayer(player).setColor(getWoolColor);
+            // Sets the wool color as the player color
+            this.getRoomPlayer(player).setColor(getWoolColor.getColor());
 
+            // Sets the player's armor
+            ItemStack helmet = new ItemStack(Material.LEATHER_HELMET);
+            LeatherArmorMeta armorMeta = (LeatherArmorMeta) helmet.getItemMeta();
+            armorMeta.setColor(getWoolColor.getColor());
+            helmet.setItemMeta(armorMeta);
 
+            ItemStack chestplate = new ItemStack(Material.LEATHER_CHESTPLATE);
+            chestplate.setItemMeta(armorMeta);
 
+            ItemStack leggings = new ItemStack(Material.LEATHER_LEGGINGS);
+            leggings.setItemMeta(armorMeta);
+
+            ItemStack boots = new ItemStack(Material.LEATHER_BOOTS);
+            boots.setItemMeta(armorMeta);
+
+            ItemStack[] armor = new ItemStack[] {boots, leggings, chestplate, helmet};
+            player.getInventory().setArmorContents(armor);
+
+            // Gives player shears
             ItemStack shears = new ItemStack(Material.SHEARS);
             player.getInventory().setItem(1, shears);
 

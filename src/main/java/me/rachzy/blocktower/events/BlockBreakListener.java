@@ -29,6 +29,7 @@ public class BlockBreakListener implements Listener {
             });
 
             if(spawnLocations.contains(brokeBlock.getLocation())) return;
+            playerRoom.setPlayersScoreboard();
             brokeBlock.setType(Material.AIR);
         }
     }
