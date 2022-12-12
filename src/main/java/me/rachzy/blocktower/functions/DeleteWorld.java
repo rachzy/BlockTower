@@ -22,6 +22,8 @@ public class DeleteWorld {
         Bukkit.getServer().unloadWorld(world, false);
         File path = world.getWorldFolder();
 
+        System.out.println("Path is: " + path);
+
         this.delete(path);
     }
 }

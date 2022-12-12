@@ -9,8 +9,10 @@ import me.rachzy.blocktower.types.RoomStatus;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.material.Wool;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.*;
@@ -86,6 +88,9 @@ public class RoomModel {
     public void setWinner(Player player) {
         if (this.winner != null) return;
         this.winner = player;
+
+        // Sets the PvP to false
+        player.getWorld().setPVP(false);
 
         this.getPlayerList().forEach(playerInRoom -> {
             if (playerInRoom.getUniqueId() == player.getUniqueId()) {
@@ -381,7 +386,7 @@ public class RoomModel {
                 Score top = objective.getScore
                         (String.format("§%s%s. %s §6(%s)",
                                 colorsList[indexOfPlayer],
-                                indexOfPlayer + 1,
+                                5 - indexOfPlayer,
                                 playerInRoom.getDisplayName(),
                                 Math.round(playerInRoom.getLocation().getY()))
                         );
@@ -414,11 +419,21 @@ public class RoomModel {
     }
 
     public void startGame() {
+        this.countdownThread.interrupt();
         // To avoid bugs
         if (this.getRoomStatus() == RoomStatus.ONGAME) return;
 
         // Set the room status
         this.setRoomStatus(RoomStatus.ONGAME);
+
+        // Creates a copy of the original arena world
+        World getArenaWorld = Bukkit.getWorld(this.getName());
+        String arenaCopyName = String.format("%s_game", this.getName());
+
+        new CopyWorld(getArenaWorld, arenaCopyName);
+
+        World arenaCopyWorld = Bukkit.getWorld(arenaCopyName);
+        arenaCopyWorld.setPVP(true);
 
         // Teleport players
         int playerIndex = 0;
@@ -426,14 +441,6 @@ public class RoomModel {
             int getX = (int) this.getArena().getSpawnById(playerIndex).get("x");
             int getY = (int) this.getArena().getSpawnById(playerIndex).get("y");
             int getZ = (int) this.getArena().getSpawnById(playerIndex).get("z");
-
-            // Creates a copy of the original arena world
-            World getArenaWorld = Bukkit.getWorld(this.getName());
-            String arenaCopyName = String.format("%s_game", this.getName());
-
-            new CopyWorld(getArenaWorld, arenaCopyName);
-
-            World arenaCopyWorld = Bukkit.getWorld(arenaCopyName);
 
             RoomPlayerModel roomPlayer = this.getRoomPlayer(player);
             Location spawnLocation = new Location(arenaCopyWorld, getX, getY, getZ);
@@ -456,6 +463,11 @@ public class RoomModel {
             DyeColor getWoolColor = ((Wool) playerBlock.getState().getData()).getColor();
             ItemStack wools = new Wool(getWoolColor).toItemStack(64);
             player.getInventory().setItem(0, wools);
+
+            // Set the wool color as the player color
+            this.getRoomPlayer(player).setColor(getWoolColor);
+
+
 
             ItemStack shears = new ItemStack(Material.SHEARS);
             player.getInventory().setItem(1, shears);
@@ -509,8 +521,9 @@ public class RoomModel {
 
         roomPlayer.decreaseLives();
         roomKiller.increaseKills();
+        roomPlayer.setLastDamageReceived(null);
 
-        killer.sendMessage(new ConfigPuller("messages").getString("player_kill"));
+        killer.sendMessage(new ConfigPuller("messages").getStringWithPrefix("player_kill"));
         this.broadcastMessage(new ConfigPuller("messages")
                 .getStringWithPrefix("player_killed")
                 .replace("{player_name}", player.getDisplayName())
