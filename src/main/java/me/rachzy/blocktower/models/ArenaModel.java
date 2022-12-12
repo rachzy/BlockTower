@@ -4,6 +4,7 @@ import me.rachzy.blocktower.data.Rooms;
 import me.rachzy.blocktower.files.Arenas;
 import me.rachzy.blocktower.functions.ConfigPuller;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
@@ -74,7 +75,6 @@ public class ArenaModel {
         setArenaFile(String.format("spawns.%s.x", spawnId), location.getBlockX());
         setArenaFile(String.format("spawns.%s.y", spawnId), location.getBlockY());
         setArenaFile(String.format("spawns.%s.z", spawnId), location.getBlockZ());
-        setArenaFile(String.format("spawns.%s.block", spawnId), (location.getBlock().getType().toString()));
         this.addSlotAmount();
     }
 
@@ -107,6 +107,7 @@ public class ArenaModel {
 
     public void setWinHeight(Integer winHeight) {
         this.winHeight = winHeight;
+        setArenaFile("winHeight", winHeight);
     }
 
     public void setOpen(Boolean open) {

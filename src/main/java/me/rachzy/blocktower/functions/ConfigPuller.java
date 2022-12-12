@@ -1,5 +1,6 @@
 package me.rachzy.blocktower.functions;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import me.rachzy.blocktower.BlockTower;
 import me.rachzy.blocktower.files.Messages;
 import org.bukkit.ChatColor;
@@ -42,5 +43,9 @@ public class ConfigPuller {
         }
 
         return listWithColors;
+    }
+
+    public Boolean getBoolean(String key) {
+        return config.getBoolean(key);
     }
 }

@@ -29,3 +29,6 @@ ongame_room_item_lore:
   - "&e({current_players}/{total_slots})"
   - ""
   - "&cThis room is currently on game"
+
+# Determines if the players will receive fall damage while playing
+fall_damage_enabled: false

@@ -53,12 +53,10 @@ public class Arenas {
                     Integer getSpawnX = arenasFile.getInt(String.format("arenas.%s.spawns.%s.x", arenaName, spawnValue));
                     Integer getSpawnY = arenasFile.getInt(String.format("arenas.%s.spawns.%s.y", arenaName, spawnValue));
                     Integer getSpawnZ = arenasFile.getInt(String.format("arenas.%s.spawns.%s.z", arenaName, spawnValue));
-                    Material getSpawnBlock = Material.matchMaterial(arenasFile.getString(String.format("arenas.%s.spawns.%s.block", arenaName, spawnValue)));
 
                     spawnLocations.put("x", getSpawnX);
                     spawnLocations.put("y", getSpawnY);
                     spawnLocations.put("z", getSpawnZ);
-                    spawnLocations.put("block", getSpawnBlock);
 
                     getArenaSpawns.add(spawnLocations);
                 }

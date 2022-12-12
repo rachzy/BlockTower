@@ -15,12 +15,16 @@ public class InventoryClickListener implements Listener {
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
         Player player = (Player) e.getWhoClicked();
+        RoomModel playerRoom = Rooms.getRoomByPlayer(player);
 
         String inventoryTitle = e.getView().getTitle();
         String roomsGuiName = new ConfigPuller("config").getString("gui_title");
-        if(inventoryTitle.equals(roomsGuiName)
-                && e.getCurrentItem() != null
-                && e.getCurrentItem().getItemMeta() != null) {
+
+        if(playerRoom != null && playerRoom.isGameStarted()) {
+            e.setCancelled(true);
+        }
+
+        if(inventoryTitle.equals(roomsGuiName) && e.getCurrentItem() != null && e.getCurrentItem().getItemMeta() != null) {
             String getItemName = e.getCurrentItem().getItemMeta().getDisplayName().substring(2);
             RoomModel getRoom = Rooms.getRoomByName(getItemName);
 

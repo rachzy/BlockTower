@@ -188,7 +188,7 @@ public class BlocktowerCommand implements CommandExecutor {
                 Location spawnLocation = player.getLocation().subtract(0, 1, 0);
                 Block spawnBlock = spawnLocation.getBlock();
 
-                if (spawnBlock.getType() == Material.AIR) {
+                if (spawnBlock.getType() != Material.WOOL) {
                     player.sendMessage(new ConfigPuller("messages").getStringWithPrefix("set_spawn_invalid_position"));
                     return true;
                 }

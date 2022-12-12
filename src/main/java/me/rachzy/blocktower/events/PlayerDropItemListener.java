@@ -6,24 +6,17 @@ import me.rachzy.blocktower.types.RoomStatus;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 
-public class PlayerMoveListener implements Listener {
-
+public class PlayerDropItemListener implements Listener {
     @EventHandler
-    public void onPlayerMove(PlayerMoveEvent e) {
+    public void onPlayerDropItem(PlayerDropItemEvent e) {
         Player player = e.getPlayer();
         RoomModel playerRoom = Rooms.getRoomByPlayer(player);
 
         if(playerRoom != null && playerRoom.getRoomStatus() == RoomStatus.ONGAME) {
-            if(!playerRoom.isGameStarted()) {
-                e.setCancelled(true);
-                return;
-            }
-            if(player.getLocation().getY() < -10) {
-                playerRoom.playerDeath(player);
-            }
+            e.setCancelled(true);
         }
-
     }
+
 }

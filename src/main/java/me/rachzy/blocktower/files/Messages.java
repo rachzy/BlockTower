@@ -33,7 +33,7 @@ public class Messages {
         messagesFile.addDefault("arena_name_already_in_use", "&cThis room name is already in use!");
         messagesFile.addDefault("set_spawn_wrong_usage", "&cUse: /blocktower setspawn <:arena_name> <:spawn_number>");
         messagesFile.addDefault("set_spawn_invalid_args", "&cThe number of the spawn has to be an integer!");
-        messagesFile.addDefault("set_spawn_invalid_position", "&cYou have to be standing on a block to set a new spawn!");
+        messagesFile.addDefault("set_spawn_invalid_position", "&cYou have to be standing on a wool block to set a new spawn!");
         messagesFile.addDefault("spawn_created", "&aSpawn {spawn_number} successfully created!");
         messagesFile.addDefault("edit_arena_wrong_usage", "&cUse: /blocktower editarena <:arena_name>");
         messagesFile.addDefault("edit_arena_teleport", "&aYou've been teleported to the world of the arena '{arena_name}'!");
@@ -66,10 +66,20 @@ public class Messages {
         messagesFile.addDefault("player_left_game", "&6{player_name} &cleft the game. &b({current_players}/{total_slots})");
         messagesFile.addDefault("game_freezetime_subtitle", "&bStarting in &e{time_in_seconds}...");
         messagesFile.addDefault("game_started_title", "&a&lFight!");
-        messagesFile.addDefault("scoreboard_current_height", "&fCurrent height: &e{current_height}");
-        messagesFile.addDefault("scoreboard_win_height", "&fWin height: &a{win_height}");
-        messagesFile.addDefault("scoreboard_kills", "&fKills: &6{player_kills}");
-        messagesFile.addDefault("scoreboard_lives", "&fRemaining lives: &c{player_lives}");
+        messagesFile.addDefault("scoreboard_current_height", "&bYour height: &e{current_height}");
+        messagesFile.addDefault("scoreboard_win_height", "&bWin height: &a{win_height}");
+        messagesFile.addDefault("scoreboard_kills", "&bKills: &6{player_kills}");
+        messagesFile.addDefault("scoreboard_remaining_lives", "&bRemaining lives: &c{player_lives}");
+        messagesFile.addDefault("player_killed", "&b{player_name} &cwas killed by &6{killer_name}");
+        messagesFile.addDefault("player_died", "&b{player_name} &cdied.");
+        messagesFile.addDefault("player_kill", "&a+1 kill!");
+        messagesFile.addDefault("player_lost", "&cYou lost. Use '/bt quit' to leave the match.");
+        messagesFile.addDefault("player_eliminated", "&6{player_name} &cwas eliminated.");
+        messagesFile.addDefault("victory_title", "&a&lVICTORY!");
+        messagesFile.addDefault("victory_subtitle", "&eYou won! Congratulations!");
+        messagesFile.addDefault("defeat_title", "&c&lDEFEAT!");
+        messagesFile.addDefault("defeat_subtitle", "&eYou lost!");
+        messagesFile.addDefault("victory_message", "&b{player_name} &6won! &e&lCONGRATULATIONS!");
     }
 
     public static FileConfiguration get() {
